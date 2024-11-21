@@ -3,6 +3,7 @@
  *  change mode of files
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -21,10 +22,18 @@ char	*ms;
 int	um;
 struct	stat st;
 
+int newmode();
+int what();
+int chmod_abs();
+int who();
+int where();
+
+int
 main(argc,argv)
+int argc;
 char **argv;
 {
-	register i;
+	register int i;
 	register char *p;
 	int status = 0;
 
@@ -52,12 +61,13 @@ char **argv;
 	exit(status);
 }
 
+int
 newmode(nm)
 unsigned nm;
 {
-	register o, m, b;
+	register int o, m, b;
 
-	m = abs();
+	m = chmod_abs();
 	if (!*ms)
 		return(m);
 	do {
@@ -85,9 +95,10 @@ unsigned nm;
 	return(nm);
 }
 
-abs()
+int
+chmod_abs()
 {
-	register c, i;
+	register int c, i;
 
 	i = 0;
 	while ((c = *ms++) >= '0' && c <= '7')
@@ -96,9 +107,10 @@ abs()
 	return(i);
 }
 
+int
 who()
 {
-	register m;
+	register int m;
 
 	m = 0;
 	for (;;) switch (*ms++) {
@@ -122,6 +134,7 @@ who()
 	}
 }
 
+int
 what()
 {
 	switch (*ms) {
@@ -133,10 +146,11 @@ what()
 	return(0);
 }
 
+int
 where(om)
-register om;
+register int om;
 {
-	register m;
+	register int m;
 
 	m = 0;
 	switch (*ms) {

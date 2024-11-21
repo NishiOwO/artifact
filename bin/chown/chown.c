@@ -3,20 +3,26 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <pwd.h>
 
-struct	passwd	*pwd,*getpwnam();
+struct	passwd	*pwd;
 struct	stat	stbuf;
 int	uid;
 int	status;
 
+int	isnumber();
+
+int
 main(argc, argv)
+int argc;
 char *argv[];
 {
-	register c;
+	register int c;
 
 	if(argc < 3) {
 		printf("usage: chown uid file ...\n");
@@ -43,10 +49,11 @@ cho:
 	exit(status);
 }
 
+int
 isnumber(s)
 char *s;
 {
-	register c;
+	register int c;
 
 	while(c = *s++)
 		if(!isdigit(c))
