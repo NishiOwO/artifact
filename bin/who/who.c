@@ -23,7 +23,7 @@ struct passwd *pw;
 
 int putline();
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__FreeBSD__)
 #define ut_name ut_user
 #endif
 

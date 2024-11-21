@@ -5,7 +5,12 @@
 #include	<stdlib.h>
 #include	<sys/param.h>
 #include	<sys/stat.h>
+#ifdef __FreeBSD__
+#include	<dirent.h>
+#define		direct dirent
+#else
 #include	<sys/dir.h>
+#endif
 #include	<unistd.h>
 #include	<fcntl.h>
 

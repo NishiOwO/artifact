@@ -3,7 +3,12 @@
  */
 
 #include <sys/types.h>
-#include <sys/dir.h>
+#ifdef __FreeBSD__
+#include	<dirent.h>
+#define		direct dirent
+#else
+#include	<sys/dir.h>
+#endif
 #include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>

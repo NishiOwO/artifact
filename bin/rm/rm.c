@@ -3,7 +3,12 @@ int	errcode;
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/dir.h>
+#ifdef __FreeBSD__
+#include	<dirent.h>
+#define		direct dirent
+#else
+#include	<sys/dir.h>
+#endif
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
