@@ -3,7 +3,7 @@
  */
 
 #include <stdio.h>
-#ifdef __linux__
+#if defined(__linux__) || defined(__OpenBSD__)
 #include <utmp.h>
 #else
 #include <utmpx.h>
@@ -14,7 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <strings.h>
-#ifdef __linux__
+#if defined(__linux__) || defined(__OpenBSD__)
 struct utmp utmp;
 #else
 struct utmpx utmp;
@@ -35,7 +35,7 @@ char **argv;
 	register char *tp, *s;
 	register FILE *fi;
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__OpenBSD__)
 	s = "/var/run/utmp";
 #else
 	s = "/var/run/utmpx";
@@ -47,7 +47,11 @@ char **argv;
 		if (tp)
 			tp = index(tp+1, '/') + 1;
 		else {	/* no tty - use best guess from passwd file */
+#ifdef __OpenBSD__
+			time_t t = utmp.ut_time;
+#else
 			time_t t = utmp.ut_tv.tv_sec;
+#endif
 			pw = getpwuid(getuid());
 			strcpy(utmp.ut_name, pw?pw->pw_name: "?");
 			strcpy(utmp.ut_line, "tty??");
@@ -80,7 +84,11 @@ int
 putline()
 {
 	register char *cbuf;
+#ifdef __OpenBSD__
+	time_t t = utmp.ut_time;
+#else
 	time_t t = utmp.ut_tv.tv_sec;
+#endif
 
 	printf("%-8.8s %-8.8s", utmp.ut_name, utmp.ut_line);
 	cbuf = ctime(&t);
