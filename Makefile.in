@@ -1,0 +1,15 @@
+# $Id$
+
+include $(TOPDIR)/Config.mk
+
+.PHONY: all clean
+.SUFFIXES: .c .o
+
+@output@: @objects@
+	$(CC) $(LDFLAGS) -o $@ @objects@ $(LIBS) @ifreq@
+
+.c.o:
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+clean:
+	rm -f *.o @output@
