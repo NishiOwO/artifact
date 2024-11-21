@@ -8,4 +8,4 @@ LDFLAGS =
 LIBS =
 
 # include $(TOPDIR)/makefiles/musl-host.mk
-# include $(TOPDIR)/makefiles/musl-gcc.mk
+include $(TOPDIR)/makefiles/musl-gcc.mk
