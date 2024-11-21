@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 /* tr - transliterate data stream */
 int	dflag	= 0;
@@ -8,14 +9,18 @@ int	save	= 0;
 char	code[256];
 char	squeez[256];
 char	vect[256];
+int	next();
+int	nextc();
 struct string { int last, max; char *p; } string1, string2;
 
+int
 main(argc,argv)
+int argc;
 char **argv;
 {
-	register i;
+	register int i;
 	int j;
-	register c, d;
+	register int c, d;
 	char *compl;
 	int lastd;
 
@@ -85,6 +90,7 @@ char **argv;
 	exit(0);
 }
 
+int
 next(s)
 struct string *s;
 {
@@ -111,10 +117,11 @@ again:
 	return(s->last = nextc(s));
 }
 
+int
 nextc(s)
 struct string *s;
 {
-	register c, i, n;
+	register int c, i, n;
 
 	c = *s->p++;
 	if(c=='\\') {

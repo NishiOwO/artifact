@@ -1,6 +1,8 @@
 /*	join F1 F2 on stuff */
 
 #include	<stdio.h>
+#include	<string.h>
+#include	<stdlib.h>
 #define F1 0
 #define F2 1
 #define	NFLD	20	/* max field per line */
@@ -21,8 +23,14 @@ char*	null	= "";
 int	unpub1;
 int	unpub2;
 int	aflg;
+void	error();
+int	cmp();
+int	input();
+int	output();
 
+int
 main(argc, argv)
+int argc;
 char *argv[];
 {
 	int i;
@@ -139,7 +147,9 @@ char *argv[];
 	return(0);
 }
 
+int
 input(n)		/* get input line and split into fields */
+int n;
 {
 	register int i, c;
 	char *bp;
@@ -167,6 +177,7 @@ input(n)		/* get input line and split into fields */
 	return(i);
 }
 
+int
 output(on1, on2)	/* print items from olist */
 int on1, on2;
 {
@@ -198,8 +209,13 @@ int on1, on2;
 	}
 }
 
+void
 error(s1, s2, s3, s4, s5)
 char *s1;
+int s2;
+int s3;
+int s4;
+int s5;
 {
 	fprintf(stderr, "join: ");
 	fprintf(stderr, s1, s2, s3, s4, s5);
@@ -207,6 +223,7 @@ char *s1;
 	exit(1);
 }
 
+int
 cmp(s1, s2)
 char *s1, *s2;
 {

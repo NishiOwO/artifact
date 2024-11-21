@@ -2,6 +2,10 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/dir.h>
+#include <fcntl.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #define EQ(x,y)	(strcmp(x,y)==0)
 #define ML	1000
 
@@ -16,12 +20,13 @@ struct {
 } ml[ML];
 long	descend();
 char	*rindex();
-char	*strcpy();
 
+int
 main(argc, argv)
+int argc;
 char **argv;
 {
-	register	i = 1;
+	register int	i = 1;
 	long	blocks = 0;
 	register char	*np;
 
@@ -78,7 +83,7 @@ char *np, *fname;
 		return 0L;
 	}
 	if(Statb.st_nlink > 1 && (Statb.st_mode&S_IFMT)!=S_IFDIR) {
-		static linked = 0;
+		static int linked = 0;
 
 		for(i = 0; i <= linked; ++i) {
 			if(ml[i].ino==Statb.st_ino && ml[i].dev==Statb.st_dev)
@@ -90,7 +95,7 @@ char *np, *fname;
 			++linked;
 		}
 	}
-	blocks = (Statb.st_size + BSIZE-1) >> BSHIFT;
+	blocks = (Statb.st_size + DEV_BSIZE-1) >> DEV_BSHIFT;
 
 	if((Statb.st_mode&S_IFMT)!=S_IFDIR) {
 		if(Aflag)
@@ -138,7 +143,7 @@ char *np, *fname;
 			c1 = endofname;
 			*c1++ = '/';
 			c2 = dp->d_name;
-			for(i=0; i<DIRSIZ; ++i)
+			for(i=0; i<NAME_MAX; ++i)
 				if(*c2)
 					*c1++ = *c2++;
 				else

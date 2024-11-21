@@ -1,6 +1,12 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
+void touch();
 
+int
 main(argc,argv)
 int argc;
 char *argv[];
@@ -17,11 +23,10 @@ for(i = 1 ; i < argc ; ++i)
 
 
 
-
 #include <sys/types.h>
 #include <sys/stat.h>
 
-
+void
 touch(force, name)
 int force;
 char *name;

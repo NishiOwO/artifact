@@ -4,10 +4,18 @@ int	errcode;
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/dir.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
 
-char	*sprintf();
+void rm();
+int yes();
+int dotname();
 
+int
 main(argc, argv)
+int argc;
 char *argv[];
 {
 	register char *arg;
@@ -48,8 +56,10 @@ char *argv[];
 	exit(errcode);
 }
 
+void
 rm(arg, fflg, rflg, iflg, level)
 char arg[];
+int fflg, rflg, iflg, level;
 {
 	struct stat buf;
 	struct direct direct;
@@ -87,7 +97,7 @@ char arg[];
 				}
 			}
 			close(d);
-			errcode += rmdir(arg, iflg);
+			errcode += rmdir(arg);
 			return;
 		}
 		printf("rm: %s directory\n", arg);
@@ -113,6 +123,7 @@ char arg[];
 	}
 }
 
+int
 dotname(s)
 char *s;
 {
@@ -127,30 +138,7 @@ char *s;
 	return(0);
 }
 
-rmdir(f, iflg)
-char *f;
-{
-	int status, i;
-
-	if(dotname(f))
-		return(0);
-	if(iflg) {
-		printf("%s: ", f);
-		if(!yes())
-			return(0);
-	}
-	while((i=fork()) == -1)
-		sleep(3);
-	if(i) {
-		wait(&status);
-		return(status);
-	}
-	execl("/bin/rmdir", "rmdir", f, 0);
-	execl("/usr/bin/rmdir", "rmdir", f, 0);
-	printf("rm: can't find rmdir\n");
-	exit(1);
-}
-
+int
 yes()
 {
 	int i, b;

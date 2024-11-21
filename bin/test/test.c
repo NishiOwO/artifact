@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 #define EQ(a,b)	((tmp=a)==0?0:(strcmp(tmp,b)==0))
 
 #define DIR 1
@@ -15,7 +19,19 @@ int	ac;
 char	**av;
 char	*tmp;
 
+int	synbad();
+int	e1();
+int	e2();
+int	e3();
+int	tio();
+int	test_exp();
+int	ftype();
+int	fsizep();
+int	length();
+
+int
 main(argc, argv)
+int argc;
 char *argv[];
 {
 
@@ -26,10 +42,12 @@ char *argv[];
 	}
 	argv[ac] = 0;
 	if (ac<=1) exit(1);
-	exit(exp()?0:1);
+	exit(test_exp()?0:1);
 }
 
-char *nxtarg(mt) {
+char *nxtarg(mt)
+int mt;
+{
 
 	if (ap>=ac) {
 		if(mt) {
@@ -41,15 +59,17 @@ char *nxtarg(mt) {
 	return(av[ap++]);
 }
 
-exp() {
+int
+test_exp() {
 	int p1;
 
 	p1 = e1();
-	if (EQ(nxtarg(1), "-o")) return(p1 | exp());
+	if (EQ(nxtarg(1), "-o")) return(p1 | test_exp());
 	ap--;
 	return(p1);
 }
 
+int
 e1() {
 	int p1;
 
@@ -59,6 +79,7 @@ e1() {
 	return(p1);
 }
 
+int
 e2() {
 	if (EQ(nxtarg(0), "!"))
 		return(!e3());
@@ -66,6 +87,7 @@ e2() {
 	return(e3());
 }
 
+int
 e3() {
 	int p1;
 	register char *a;
@@ -74,7 +96,7 @@ e3() {
 
 	a=nxtarg(0);
 	if(EQ(a, "(")) {
-		p1 = exp();
+		p1 = test_exp();
 		if(!EQ(nxtarg(0), ")")) synbad(") expected","");
 		return(p1);
 	}
@@ -136,6 +158,7 @@ e3() {
 	synbad("unknown operator ",p2);
 }
 
+int
 tio(a, f)
 char *a;
 int f;
@@ -149,6 +172,7 @@ int f;
 	return(0);
 }
 
+int
 ftype(f)
 char *f;
 {
@@ -161,6 +185,7 @@ char *f;
 	return(FIL);
 }
 
+int
 fsizep(f)
 char *f;
 {
@@ -170,6 +195,7 @@ char *f;
 	return(statb.st_size>0);
 }
 
+int
 synbad(s1,s2)
 char *s1, *s2;
 {
@@ -180,6 +206,7 @@ char *s1, *s2;
 	exit(255);
 }
 
+int
 length(s)
 	char *s;
 {

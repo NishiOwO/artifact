@@ -6,6 +6,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 int openf[20] = { 1 };
 int n = 1;
 int t = 0;
@@ -15,10 +18,11 @@ char in[512];
 
 char out[512];
 
-extern errno;
-long	lseek();
+int stash();
 
+int
 main(argc,argv)
+int argc;
 char **argv;
 {
 	int register r,w,p;
@@ -67,7 +71,7 @@ char **argv;
 				r = 0;
 				if(w<=0) {
 					stash(p);
-					return;
+					return 0;
 				}
 			}
 			out[p++] = in[r++];
@@ -76,7 +80,9 @@ char **argv;
 	}
 }
 
+int
 stash(p)
+int p;
 {
 	int k;
 	int i;
@@ -85,11 +91,4 @@ stash(p)
 	for(i=0; i<p; i+=d)
 		for(k=0;k<n;k++)
 			write(openf[k], out+i, d<p-i?d:p-i);
-}
-
-puts(s)
-char *s;
-{
-	while(*s)
-		write(2,s++,1);
 }

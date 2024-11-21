@@ -2,9 +2,12 @@
  * Print working (current) directory
  */
 #include	<stdio.h>
+#include	<stdlib.h>
 #include	<sys/param.h>
 #include	<sys/stat.h>
 #include	<sys/dir.h>
+#include	<unistd.h>
+#include	<fcntl.h>
 
 char	dot[]	= ".";
 char	dotdot[] = "..";
@@ -14,6 +17,10 @@ int	off	= -1;
 struct	stat	d, dd;
 struct	direct	dir;
 
+int prname();
+int cat();
+
+int
 main()
 {
 	int rdev, rino;
@@ -53,6 +60,7 @@ main()
 	}
 }
 
+int
 prname()
 {
 	write(1, "/", 1);
@@ -63,9 +71,10 @@ prname()
 	exit(0);
 }
 
+int
 cat()
 {
-	register i, j;
+	register int i, j;
 
 	i = -1;
 	while (dir.d_name[++i] != 0);

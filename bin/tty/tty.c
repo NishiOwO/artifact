@@ -1,10 +1,14 @@
 /*
  * Type tty name
  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-char	*ttyname();
-
+int
 main(argc, argv)
+int argc;
 char **argv;
 {
 	register char *p;
