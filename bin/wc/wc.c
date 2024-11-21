@@ -1,8 +1,13 @@
 /* wc line and word count */
 
 #include <stdio.h>
+#include <stdlib.h>
 
+int wcp();
+
+int
 main(argc, argv)
+int argc;
 char **argv;
 {
 	int i, token;
@@ -66,6 +71,7 @@ char **argv;
 	exit(0);
 }
 
+int
 wcp(wd, charct, wordct, linect)
 register char *wd;
 long charct; long wordct; long linect;

@@ -5,12 +5,19 @@
 #include <stdio.h>
 #include <utmp.h>
 #include <pwd.h>
+#include <time.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <strings.h>
 struct utmp utmp;
 struct passwd *pw;
-struct passwd *getpwuid();
 
-char *ttyname(), *rindex(), *ctime(), *strcpy(), *index();
+int putline();
+
+int
 main(argc, argv)
+int argc;
 char **argv;
 {
 	register char *tp, *s;
@@ -52,6 +59,7 @@ char **argv;
 	}
 }
 
+int
 putline()
 {
 	register char *cbuf;
