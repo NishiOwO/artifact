@@ -3,14 +3,14 @@
  */
 
 #include <stdio.h>
-#include <utmp.h>
+#include <utmpx.h>
 #include <pwd.h>
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <strings.h>
-struct utmp utmp;
+struct utmpx utmp;
 struct passwd *pw;
 
 int putline();
@@ -23,7 +23,7 @@ char **argv;
 	register char *tp, *s;
 	register FILE *fi;
 
-	s = "/etc/utmp";
+	s = "/var/run/utmpx";
 	if(argc == 2)
 		s = argv[1];
 	if (argc==3) {
@@ -34,7 +34,7 @@ char **argv;
 			pw = getpwuid(getuid());
 			strcpy(utmp.ut_name, pw?pw->pw_name: "?");
 			strcpy(utmp.ut_line, "tty??");
-			time(&utmp.ut_time);
+			time(&utmp.ut_tv.tv_sec);
 			putline();
 			exit(0);
 		}
@@ -65,6 +65,6 @@ putline()
 	register char *cbuf;
 
 	printf("%-8.8s %-8.8s", utmp.ut_name, utmp.ut_line);
-	cbuf = ctime(&utmp.ut_time);
+	cbuf = ctime(&utmp.ut_tv.tv_sec);
 	printf("%.12s\n", cbuf+4);
 }
